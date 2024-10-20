@@ -11,7 +11,7 @@ struct tileMapData new_tile_map_data(char sym) {
 	
 	for (int i = 0; i < sizeof(tmp.arr) / sizeof(tmp.arr[0]); i++) {
 		for (int j = 0; j < sizeof(tmp.arr[i]) / sizeof(tmp.arr[i][0]); j++) {
-			struct object a = new_object(new_vec2(i,j), sym, GREEN, GREEN_BG);
+			struct object a = new_object(new_vec2(i,j), sym, GREEN, DEF);
 			tmp.arr[i][j][0] = a;
 		}
 	}
@@ -49,7 +49,7 @@ void read(struct tileMapLayer map) {
 	for (int i = 0; i < sizeof(map.data.arr) / sizeof(map.data.arr[0]); i++) {
 		for (int j = 0; j < sizeof(map.data.arr[i]) / sizeof(map.data.arr[i][0]); j++) {
 			printf("%s%s%c%s",map.data.arr[i][j][0].color_bg, map.data.arr[i][j][0].color, map.data.arr[i][j][0].sym, DEF);
-			//printf(" "); //for debug
+			printf(" "); //for debug
 		}
 		printf("\n");
 	}

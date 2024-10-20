@@ -1,9 +1,12 @@
 #include <stdio.h>
+#include <stdlib.c>
 
 #include "utils/color.c"
+#include "utils/string.c"
 #include "classes/vector.c"
 #include "classes/object.c"
 #include "classes/tilemap.c"
+#include "classes/player.c""
 
 int main() {
 	struct tileMapLayer tmp = new_tile_map_layer(new_tile_map_data('#'));

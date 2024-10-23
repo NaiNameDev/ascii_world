@@ -35,3 +35,7 @@ struct vec2 plus_vec2(struct vec2 a, struct vec2 b) {
 void print_vec2(struct vec2 tmp) {
 	printf("Vec2(%d, %d)\n", tmp.x, tmp.y);
 }
+
+struct vec2 vec3_to_vec2(struct vec3 pos) {
+	return new_vec2(pos.x, pos.y);
+}

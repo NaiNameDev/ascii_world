@@ -15,6 +15,22 @@ struct String init_string(size_t size, char* charstr) {
 	return tmp;
 }
 
+void char_append(struct String *str, char charstr) {
+	str->size += 1;
+	(*str).arr = realloc(str->arr, str->size * sizeof(char));
+	(*str).arr[str->size - 1] = charstr;
+}
+
+void char_array_append(struct String *str, size_t size, char* charstr) {
+	size_t start_point = str->size;
+	str->size += size;
+
+	(*str).arr = realloc(str->arr, str->size * sizeof(char));
+	for (int i = 0; i < size; i++) {
+		(*str).arr[i + start_point] = charstr[i];
+	}
+}
+
 void append(struct String *str, struct String to_add) {
 	size_t start_point = str->size;
 	str->size += to_add.size;

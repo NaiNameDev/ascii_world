@@ -10,6 +10,7 @@
 #define rock new_object(new_vec3(0,0,0), 'r', DEF, DEF, 1, init_string(4, "rock"))
 #define wood_door new_object(new_vec3(0,0,0), 'D', YELLOW_BG, DEF, 0, init_string(4, "door"))
 
+char grass_syms[] = ";,@,,,,,,,,,,][}{\"%";
 char air_sym = '.';
 
 #include "utils/color.c"
@@ -21,12 +22,25 @@ char air_sym = '.';
 #include "classes/entity.c"
 
 int main() {
-	srand(time(NULL));
-	int r = rand();
+	srand(time(NULL)); //for random O_o
 
 	struct tileMapLayer tmp = new_tile_map_layer(
-		new_tile_map_data(air, 16, 16, 8));
-	struct object* a = set_obj(new_vec3(3,3,0), new_object(new_vec3(3,3,3), 'A', RED, RED, 0, init_string(6, "player")), &tmp);
+		new_tile_map_data(air, 24, 24, 8));
+	
+	struct object o = grass;
+	for (int i = 0; i < 24; i++) {
+		for (int j = 0; j < 24; j++) {
+			if ( i * j > 24) {
+				o.sym = grass_syms[rand() % 19];
+				set_obj(new_vec3(i, j, 0), o, &tmp);
+			}
+			else {
+				set_obj(new_vec3(i, j, 0), water, &tmp);
+			}
+		}
+	}
+
+	struct object* a = set_obj(new_vec3(6,6,7), new_object(new_vec3(3,3,3), 'A', RED, RED, 0, init_string(6, "player")), &tmp);
 	
 	print_vec3(get_free_space(new_vec2(3,5), &tmp)->position);
 
@@ -40,7 +54,6 @@ int main() {
 	int ch = 0;
 	while (1) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		printf("%d", r);
 		read_map(&tmp);
 		read_inventory(inv);
 		scanf("%c", &ch);
@@ -63,7 +76,7 @@ int main() {
 			move_entity(&ts, new_vec2(ts.self->position.x, ts.self->position.y - 1));
 		}
 		if (ch == 'e') {
-			place_item(&inv.arr[inv.chosen_slot], &tmp, get_free_space(new_vec2(ts.self->position.x, ts.self->position.y - 1), &tmp)->position);
+			place_item(&inv.arr[inv.chosen_slot], &tmp, get_free_space(new_vec2(ts.self->position.x, ts.self->position.y - 1), &tmp)->position, inv.chosen_slot);
 		}
 		if (ch == 'x') {
 			set_free_obj(get_last_object(new_vec2(ts.self->position.x, ts.self->position.y - 1), &tmp)->position, air, &tmp);

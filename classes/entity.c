@@ -18,8 +18,13 @@ struct player {
 	struct entity ent;
 	struct inventory inv;
 };
-void place_item(struct item *to_place, struct tileMapLayer *map, struct vec3 pos) {
-	if (to_place->block_id != -1) {
+void place_item(struct item *to_place, struct tileMapLayer *map, struct vec3 pos, int index) {
+	if (to_place->block_id != -1 && to_place->stack != 0) {
+		to_place->stack -= 1;
 		set_obj(pos, item_to_object(*to_place), map);
+	}
+	if (to_place->stack <= 0) {
+		set_obj(pos, item_to_object(*to_place), map);
+		*to_place = NULLITEM;
 	}
 }

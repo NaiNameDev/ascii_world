@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #define air new_object(new_vec3(0,0,0), '.', DEF, DEF, 0, init_string(3, "air"))
 #define water new_object(new_vec3(0,0,0), '~', CYAN, CYAN, 0, init_string(5, "water"))
@@ -20,6 +21,9 @@ char air_sym = '.';
 #include "classes/entity.c"
 
 int main() {
+	srand(time(NULL));
+	int r = rand();
+
 	struct tileMapLayer tmp = new_tile_map_layer(
 		new_tile_map_data(air, 16, 16, 8));
 	struct object* a = set_obj(new_vec3(3,3,0), new_object(new_vec3(3,3,3), 'A', RED, RED, 0, init_string(6, "player")), &tmp);
@@ -36,6 +40,7 @@ int main() {
 	int ch = 0;
 	while (1) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		printf("%d", r);
 		read_map(&tmp);
 		read_inventory(inv);
 		scanf("%c", &ch);

@@ -6,24 +6,24 @@ struct item {
 	struct String name;
 	
 	int stack;
-	int is_block;
+	int block_id;
 };
-struct item new_item(char icon, char color[5], char color_bg[5], struct String name, int stack, int is_block) {
+struct item new_item(char icon, char color[5], char color_bg[5], struct String name, int stack, int block_id) {
 	struct item tmp;
 	tmp.icon = icon;
 	set_color(tmp.icon_color, color);
 	set_color(tmp.icon_color_bg, color_bg);
 	reinit(&tmp.name, name);
 	tmp.stack = stack;
-	tmp.is_block = is_block;
+	tmp.block_id = block_id;
 	
 	return tmp;
 }
-struct item object_to_item(struct object obj, struct String name, int stack) {
-	return new_item(obj.sym, obj.color, obj.color_bg, name, stack, 1);
+struct item object_to_item(struct object obj, int stack) {
+	return new_item(obj.sym, obj.color, obj.color_bg, obj.name, stack, obj.id);
 }
 struct object item_to_object(struct item itm) {
-	return new_object(new_vec2(0,0), itm.icon, itm.icon_color, itm.icon_color_bg, 0, 1);
+	return new_object(new_vec3(0,0,0), itm.icon, itm.icon_color, itm.icon_color_bg, itm.block_id, itm.name);
 }
 #define NULLITEM new_item('.', DEF, DEF, init_string(4,"NULL"), 0, 0)
 
@@ -54,18 +54,31 @@ struct inventory new_inventory(size_t size) {
 	}
 	return tmp;
 }
+void set_chosen_slot(int index, struct inventory* inv) {
+	if (index >= 0 && index < inv->size) {
+		inv->chosen_slot = index;
+	}
+}
+void free_inventory(struct inventory *tmp) {
+	for (int i = 0; i < tmp->size; i++) {
+		free_item(&tmp->arr[i]);
+	}
+	free(tmp->arr);
+}
 void read_inventory(struct inventory tmp) {
 	for (int i = 0; i < tmp.size; i++) {
 		if ( i == tmp.chosen_slot ) {
 			read_color(WHITE_BG);
 			read_color(BLACK);
-			printf("%c%s", tmp.arr[i].icon, DEF);
+			printf(" %c %s", tmp.arr[i].icon, DEF);
 		}
 		else {
 			read_item(tmp.arr[i]);
 		}
 	}
 	printf("\n");
+	printf("%s X", tmp.arr[tmp.chosen_slot].name.arr);
+	printf("%d\n", tmp.arr[tmp.chosen_slot].stack);
 }
 void set_item(struct inventory *tmp, struct item to_add, size_t index) {
 	free_item(&tmp->arr[index]);

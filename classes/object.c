@@ -1,20 +1,23 @@
 struct object {
 	struct vec3 position;
 	char sym;
+	struct String name;
 	char color[5];
 	char color_bg[5];
 	int id;
-	int colide; // 1 - colide, 0 - not colide
 };
-struct object new_object(struct vec3 pos, char sym, char color[5], char color_bg[5], int id, int colide) {
+struct object new_object(struct vec3 pos, char sym, char color[5], char color_bg[5], int id, struct String name) {
 	struct object tmp;
 	tmp.position = pos;
 	tmp.sym = sym;
+	reinit(&tmp.name, name);
 	set_color(tmp.color, color);
 	set_color(tmp.color_bg, color_bg);
 	tmp.id = id;
-	tmp.colide = colide;
 	return tmp;
+}
+void free_object(struct object *obj) {
+	free(&obj->name.arr);
 }
 
 void read_object(struct object obj) {
@@ -26,5 +29,7 @@ void read_object(struct object obj) {
 
 //id table
 //
+// -1: item
+//
 // 0: air
-// 1: test block
+// 1: block

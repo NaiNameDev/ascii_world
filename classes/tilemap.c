@@ -2,8 +2,8 @@ struct tileMapData {
 	struct vec3 size;
 	struct object *arr;
 };
-size_t vec3_to_size(struct vec3 p) {
-	return p.x * p.y * p.z + p.y * p.z;
+size_t vec3_to_size(struct vec3 pos, struct vec3 size) {
+	return (size.x * size.y * pos.z) + (pos.x * size.y + pos.y); //god deamn я эту формулу ИСКАЛ СУКА 2 СРАНЫХ ДЛЯ СУКА
 }
 struct tileMapData new_tile_map_data(struct object obj, int x, int y, int z) {
 	struct tileMapData tmp;
@@ -12,13 +12,18 @@ struct tileMapData new_tile_map_data(struct object obj, int x, int y, int z) {
 	
 	for (int i = 0; i < y; i++) {
 		for (int j = 0; j < x; j++) {
-			obj.position = new_vec3(i, j, 0);
-			tmp.arr[i * y * z + j * z] = obj;
+			for (int o = 0; o < z; o++) {
+				obj.position = new_vec3(j, i, o);
+				tmp.arr[vec3_to_size(new_vec3(j, i, o), new_vec3(x, y, z))] = obj;
+			}
 		}
 	}
 	return tmp;
 }
 struct tileMapData free_tile_map_data(struct tileMapData *data) {
+	//for (int i = 0; i < data->size.x * data->size.y * data->size.z; i++) {
+	//	free(&data->arr[i].name.arr);
+	//}
 	free(data->arr);
 }
 
@@ -31,64 +36,51 @@ struct tileMapLayer new_tile_map_layer(struct tileMapData data) {
 	return tmp;
 }
 struct object* get_obj(struct vec3 pos, struct tileMapLayer* map) {
-	struct object* tmp = &map->data.arr[pos.x * map->data.size.y + pos.y];
-	return tmp;
+	return &map->data.arr[vec3_to_size(pos, map->data.size)];
 }
 struct object* set_obj(struct vec3 pos, struct object new_obj, struct tileMapLayer* map) {
 	new_obj.position = pos;
-	map->data.arr[pos.x * map->data.size.y + pos.y] = new_obj;
+	map->data.arr[vec3_to_size(pos, map->data.size)] = new_obj;
 	return get_obj(pos, map);
 }
 void set_free_obj(struct vec3 pos, struct object new_obj, struct tileMapLayer* map) {
 	new_obj.position = pos;
-	map->data.arr[pos.x * map->data.size.y + pos.y] = new_obj;
+	map->data.arr[vec3_to_size(pos, map->data.size)] = new_obj;
+}
+struct object* get_last_object(struct vec2 pos, struct tileMapLayer *map) {
+	struct object* tmp = &map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, 0), map->data.size)];
+	
+	for (int i = 0; i < map->data.size.z; i++) {
+		if (get_obj(new_vec3(pos.x, pos.y, i), map)->sym != air_sym) {
+			tmp = get_obj(new_vec3(pos.x, pos.y, i), map);
+		}
+	}
+	return tmp;
+}
+struct object* get_free_space(struct vec2 pos, struct tileMapLayer *map) {
+	for (int i = 0; i < map->data.size.z; i++) {
+		print_vec2(pos);
+		if (map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, i), map->data.size)].sym == air_sym) {
+			return &map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, i), map->data.size)];
+		}
+	}
 }
 struct object* move_obj(struct vec2 new_pos, struct object obj_to_move, struct tileMapLayer* map) {
-	map->data.arr[obj_to_move.position.x * obj_to_move.position.y * obj_to_move.position.z + obj_to_move.position.y * obj_to_move.position.z];
-	struct vec3 last = get_last_object(new_pos , &map);
-	map->data.arr[new_pos.x * new_pos.y * last.z + new_pos.y * last.z] = obj_to_move;
-	return get_obj(new_vec3(new_pos.x, new_pos.y, last.z), map);
-}
-struct vec3 get_last_object(struct vec2 pos, struct tileMapLayer *map) {
-	for (int i = 0; i < map->data.size.z; i++) {
-		if (map->data.arr[pos.x * pos.y * i + pos.y * i].sym != '.') {
-			return new_vec3(pos.x, pos.y, pos.x * pos.y * i + pos.y + i);
-		}
-	}
+	//map->data.arr[vec3_to_size(obj_to_move.position, map->data.size)] = air;
+	struct vec3 pos = new_vec3(new_pos.x, new_pos.y, get_free_space(new_pos, map)->position.z);
+	set_obj(obj_to_move.position, air, map);
+	obj_to_move.position = pos;
+	set_obj(pos, obj_to_move, map);
+	return get_obj(pos, map);
 }
 
-/* NOT WORKS!!! meybe be fixd when i need it xd
-void resize_tile_map_layer(struct tileMapLayer *map, char sym, int x, int y) {
-	int start_point = map->data.size.x * map->data.size.y;
-	map->data.size = new_vec3(x, y);
-	map->data.arr = realloc(map->data.arr, (x * y) * sizeof(struct object));
-	
-	for (int i = 0; i < y - (y - start_point); i++) {
-		for (int j = 0; j < x - (x - start_point); j++) {
-			struct object a = new_object(new_vec3(i,j), sym, GREEN, DEF);
-			map->data.arr[(i * y + j) + start_point] = a;
-		}
-	}
-}
-*/
-void read_map(struct tileMapLayer map) {
-	//struct String str = init_string(0, "");
-
-	for (int i = 0; i < map.data.size.y; i++) {
-		for (int j = 0; j < map.data.size.x; j++) {
-			//char_array_append(&str, 5, map.data.arr[i][j][0].color_bg);
-			//char_array_append(&str, 5, map.data.arr[i][j][0].color);
-			//char_append(&str, map.data.arr[i][j][0].sym);
-			//char_array_append(&str, 5, DEF);
-			//struct object *tmp = &map.data.arr[i * map.data.size.y + j];
-			//printf("%s%s%c%s ", tmp->color_bg, tmp->color, tmp->sym, DEF);
-			read_object(map.data.arr[i * map.data.size.y * map.data.size.z + j * map.data.size.z]);
+void read_map(struct tileMapLayer* map) {
+	for (int i = 0; i < map->data.size.y; i++) {
+		for (int j = 0; j < map->data.size.x; j++) {
+			read_object(*get_last_object(new_vec2(j, i), map));
 			printf(" "); //for debug
 		}
 		printf("\n");
-		//char_append(&str, '\n');
 	}
 	printf("\n");
-	//printf("\r%s\r", str.arr);
-	//free_string(&str);
 }

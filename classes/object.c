@@ -19,7 +19,7 @@ struct object new_object(struct vec3 pos, char sym, char color[5], char color_bg
 	return tmp;
 }
 void free_object(struct object *obj) {
-	free(&obj->name.arr);
+	free_string(&obj->name);
 }
 
 void read_object(struct object obj) {

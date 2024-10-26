@@ -85,3 +85,8 @@ void set_item(struct inventory *tmp, struct item to_add, size_t index) {
 	free_item(&tmp->arr[index]);
 	tmp->arr[index] = to_add;
 }
+
+struct craft {
+	struct item crafting_item;
+	
+};

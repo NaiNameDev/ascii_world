@@ -29,9 +29,11 @@ struct tileMapData free_tile_map_data(struct tileMapData *data) {
 
 struct tileMapLayer {
 	struct tileMapData data;
+	int index;
 };
-struct tileMapLayer new_tile_map_layer(struct tileMapData data) {
+struct tileMapLayer new_tile_map_layer(struct tileMapData data, int index) {
 	struct tileMapLayer tmp;
+	tmp.index = index;
 	tmp.data = data;
 	return tmp;
 }
@@ -74,6 +76,15 @@ struct object* move_obj(struct vec2 new_pos, struct object obj_to_move, struct t
 	return get_obj(pos, map);
 }
 
+struct object* move_to_other_map(struct vec2 new_pos, struct object obj_to_move, struct tileMapLayer* startmap, struct tileMapLayer* endmap) {
+	//map->data.arr[vec3_to_size(obj_to_move.position, map->data.size)] = air;
+	struct vec3 pos = new_vec3(new_pos.x, new_pos.y, get_free_space(new_pos, endmap)->position.z);
+	set_obj(obj_to_move.position, air, startmap);
+	obj_to_move.position = pos;
+	set_obj(pos, obj_to_move, endmap);
+	return get_obj(pos, endmap);
+}
+
 int search_id(struct vec2 pos, int id, struct tileMapLayer* map) {
 	for (int i = 0; i < map->data.size.z; i++) {
 		if (get_obj(new_vec3(pos.x, pos.y, i), map)->id == id) {
@@ -97,6 +108,15 @@ struct tileMap {
 	struct tileMapLayer* arr;
 	size_t layer_count;
 };
-struct tileMap new_tile_map() {
+struct tileMap new_tile_map(/*struct tileMapLayer paste_map*/ size_t layer_count) {
+	struct tileMap tmp;
+	tmp.layer_count = layer_count;
 	
+	tmp.arr = malloc(layer_count * sizeof(struct tileMapLayer));
+	
+	for (int i = 0; i < layer_count; i++) {
+		tmp.arr[i] = new_tile_map_layer(new_tile_map_data(air, 24, 24, 8), i);
+	}
+
+	return tmp;
 }

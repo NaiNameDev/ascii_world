@@ -49,6 +49,17 @@ void reinit(struct String *str, struct String new) {
 		(*str).arr[i] = new.arr[i];
 	}
 }
+int check_strings_equal(struct String to_ch, struct String target) {
+	if (to_ch.size != target.size) {
+		return false;
+	}
+	for (int i = 0; i < to_ch.size; i++) {
+		if (to_ch.arr[i] != target.arr[i]) {
+			return false;
+		}
+	}
+	return true;
+}
 void free_string(struct String *str) {
 	free(str->arr);
 }

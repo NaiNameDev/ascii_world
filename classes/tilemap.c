@@ -74,6 +74,15 @@ struct object* move_obj(struct vec2 new_pos, struct object obj_to_move, struct t
 	return get_obj(pos, map);
 }
 
+int search_id(struct vec2 pos, int id, struct tileMapLayer* map) {
+	for (int i = 0; i < map->data.size.z; i++) {
+		if (get_obj(new_vec3(pos.x, pos.y, i), map)->id == id) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void read_map(struct tileMapLayer* map) {
 	for (int i = 0; i < map->data.size.y; i++) {
 		for (int j = 0; j < map->data.size.x; j++) {
@@ -83,4 +92,11 @@ void read_map(struct tileMapLayer* map) {
 		printf("\n");
 	}
 	printf("\n");
+}
+struct tileMap {
+	struct tileMapLayer* arr;
+	size_t layer_count;
+};
+struct tileMap new_tile_map() {
+	
 }

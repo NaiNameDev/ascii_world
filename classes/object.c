@@ -2,8 +2,10 @@ struct object {
 	struct vec3 position;
 	char sym;
 	struct String name;
+	
 	char color[5];
 	char color_bg[5];
+	
 	int id;
 };
 struct object new_object(struct vec3 pos, char sym, char color[5], char color_bg[5], int id, struct String name) {
@@ -33,3 +35,4 @@ void read_object(struct object obj) {
 //
 // 0: air
 // 1: block
+// 2: air block

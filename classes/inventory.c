@@ -1,3 +1,5 @@
+#define NULLITEM new_item('.', DEF, DEF, init_string(0,""), 0, 0)
+
 struct item {
 	char icon;
 	char icon_color[5];
@@ -25,7 +27,6 @@ struct item object_to_item(struct object obj, int stack) {
 struct object item_to_object(struct item itm) {
 	return new_object(new_vec3(0,0,0), itm.icon, itm.icon_color, itm.icon_color_bg, itm.block_id, itm.name);
 }
-#define NULLITEM new_item('.', DEF, DEF, init_string(4,"NULL"), 0, 0)
 
 void read_item(struct item itm) {
 	read_color(itm.icon_color_bg);

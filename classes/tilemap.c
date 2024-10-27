@@ -107,52 +107,57 @@ struct tileMap {
 	struct tileMapLayer* arr;
 	size_t layer_count;
 };
-struct tileMap new_tile_map(/*struct tileMapLayer paste_map*/ size_t layer_count) {
+struct tileMap new_tile_map(/*struct tileMapLayer paste_map*/ size_t layer_count, int size_x, int size_y) {
 	struct tileMap tmp;
 	tmp.layer_count = layer_count;
 	
 	tmp.arr = malloc(layer_count * sizeof(struct tileMapLayer));
 	
 	for (int i = 0; i < layer_count; i++) {
-		tmp.arr[i] = new_tile_map_layer(new_tile_map_data(air, 24, 24, 8), i);
+		tmp.arr[i] = new_tile_map_layer(new_tile_map_data(air, size_x, size_y, 8), i);
 	}
 
 	return tmp;
 }
 //char air_progress[2] = "#+."
-void read_tile_map(struct tileMap* map, size_t start_z) {
-	for (int i = 0; i < map->arr[start_z].data.size.y; i++) {
-		for (int j = 0; j < map->arr[start_z].data.size.x; j++) {
-			if (get_last_object(new_vec2(j, i), &map->arr[start_z])->id != -1) {
-				read_object(*get_last_object(new_vec2(j, i), &map->arr[start_z]));
-			}
-			else if (start_z + 1 != map->layer_count) {
-				if (get_last_object(new_vec2(j, i), &map->arr[start_z + 1])->id != -1) {
-					switch (get_last_object(new_vec2(j, i), &map->arr[start_z + 1])->id) {
-						case 0:
-							printf("=");
-							break;
-						case 1:
-							printf("#");
-							break;
-						case 2:
-							printf("+");
-							break;
+void read_tile_map(struct tileMap* map, size_t start_z, struct vec2 start, struct vec2 end) {
+	for (int i = start.y; i < end.y; i++) {
+		for (int j = start.x; j < end.x; j++) {
+			if (i >= 0 && j >= 0) {
+				if (get_last_object(new_vec2(j, i), &map->arr[start_z])->id != -1) {
+						read_object(*get_last_object(new_vec2(j, i), &map->arr[start_z]));
+				}
+				else if (start_z + 1 != map->layer_count) {
+					if (get_last_object(new_vec2(j, i), &map->arr[start_z + 1])->id != -1) {
+						switch (get_last_object(new_vec2(j, i), &map->arr[start_z + 1])->id) {
+							case 0:
+								printf("=");
+								break;
+							case 1:
+								read_color(BLACK);
+								read_color(WHITE_BG);
+								printf("#");
+								read_color(DEF);
+								break;
+							case 2:
+								printf("+");
+								break;
+						}
 					}
+					else {
+						printf(".");
+					}
+					//for (int j = 0; j < map->layer_count - start_index; j++) {
+					//	if (*get_last_object(new_vec2(j, i), map)->index != -1) {
+					//		printf(air_progress[j]);
+					//	}
+					//}
 				}
 				else {
 					printf(".");
 				}
-				//for (int j = 0; j < map->layer_count - start_index; j++) {
-				//	if (*get_last_object(new_vec2(j, i), map)->index != -1) {
-				//		printf(air_progress[j]);
-				//	}
-				//}
+				printf(" "); //for debug
 			}
-			else {
-				printf(".");
-			}
-			printf(" "); //for debug
 		}
 		printf("\n");
 	}

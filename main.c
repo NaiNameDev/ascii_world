@@ -5,12 +5,12 @@ char asd[16] = ";;;;;,,,,,,,,,@$";
 
 int main() {
 	srand(time(NULL)); //for random O_o
-	struct tileMap map = new_tile_map(3);
+	struct tileMap map = new_tile_map(3, 500, 500);
 	
 	struct object r = item_to_object(rock);
 	struct object o = item_to_object(grass);
-	for (int i = 0; i < 24; i++) {
-		for (int j = 0; j < 24; j++) {
+	for (int i = 0; i < 500; i++) {
+		for (int j = 0; j < 500; j++) {
 			if ( i * j > 48) {
 				int a = rand() % 16;
 				o.sym = asd[a];
@@ -35,7 +35,7 @@ int main() {
 			set_obj(new_vec3(i, j, 0), r, &map.arr[1]);
 		}
 	}
-	struct object* a = set_obj(new_vec3(6,6,7), new_object(new_vec3(3,3,3), 'A', GREEN, PURPLE_BG, 0, init_string(6, "player")), &map.arr[0]);
+	struct object* a = set_obj(new_vec3(250,250,7), new_object(new_vec3(3,3,3), 'A', GREEN, PURPLE_BG, 0, init_string(6, "player")), &map.arr[0]);
 
 	struct entity ts = new_entity(a, &map.arr[0]);
 	
@@ -53,7 +53,7 @@ int main() {
 	while (true) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		printf("wasd - move, 1, 2 - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, q - QUIT\n");
-		read_tile_map(&map, ts.self_map->index);
+		read_tile_map(&map, ts.self_map->index, plus_vec2(vec3_to_vec2(ts.self->position), new_vec2(-8,-8)), plus_vec2(vec3_to_vec2(ts.self->position), new_vec2(9,9)));
 		print_vec3(ts.self->position);
 		read_inventory(inv);
 		scanf("%c", &ch);

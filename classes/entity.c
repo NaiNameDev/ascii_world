@@ -10,7 +10,7 @@ struct entity new_entity(struct object *self, struct tileMapLayer *self_tilemap)
 }
 void move_entity(struct entity *tmp, struct vec2 new_pos) {
 	if (search_id(new_pos, 1, tmp->self_map) == false) {
-		if (new_pos.x >= 0 && new_pos.y >= 0 && new_pos.x < tmp->self_map->data.size.x && new_pos.y < tmp->self_map->data.size.y)
+		if (new_pos.x > 0 && new_pos.y > 0 && new_pos.x < tmp->self_map->data.size.x && new_pos.y < tmp->self_map->data.size.y)
 			tmp->self = move_obj(new_pos, *tmp->self, tmp->self_map);
 		}
 }

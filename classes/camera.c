@@ -1,23 +1,16 @@
 struct camera {
-	struct tileMap *map;
-	struct vec2 start;
-	struct vec2 end;
-};
-struct camera new_camera(struct tileMap* map, struct vec2 start, struct vec2 end) {
+	struct vec2 position;
+	struct vec2 local_start;
+	struct vec2 local_end;
+};/*
+struct camera new_camera(struct vec2) {
 	struct camera;
 	camera.map = map;
 	camera.start = start;
 	camera.start = end;
 	return tmp;
 }
-void read_camera(struct camera cam) {
-	for (int i = 0; i < cam.end.y; i++) {
-		for (int j = 0; j < cam.end.x; j++) {
-			read_object(*get_last_object(new_vec2(j, i), map));
-			printf(" ");
-		}
-		printf("\n");
-	}
-	printf("\n");
+void read_camera(struct tileMap* map, struct camera cam) {
+	read_tile_map(map, cam.start, cam.end);
 }
 

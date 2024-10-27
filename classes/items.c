@@ -1,7 +1,7 @@
 //floor
-#define sand		new_item('S', YELLOW, YELLOW, init_string(4, "sand"), 1, 0)
-#define water		new_item('~', CYAN, CYAN, init_string(5, "water"), 1, 0)
-#define grass		new_item(',', GREEN, GREEN, init_string(5, "grass"), 1, 0)
+#define sand			new_item('S', YELLOW, YELLOW, init_string(4, "sand"), 1, 0)
+#define water			new_item('~', CYAN, CYAN, init_string(5, "water"), 1, 0)
+#define grass			new_item(',', GREEN, GREEN, init_string(5, "grass"), 1, 0)
 
 //blocks
 #define wood_log		new_item('O', YELLOW, YELLOW, init_string(3, "log"), 1, 1)

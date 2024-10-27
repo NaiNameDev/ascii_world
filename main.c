@@ -40,16 +40,19 @@ int main() {
 	struct entity ts = new_entity(a, &map.arr[0]);
 	
 	struct inventory inv = new_inventory(10);
-	set_item(&inv, wood_log, 1);
-	set_item(&inv, wood_door, 2);
-	set_item(&inv, wood_floor, 3);
-	set_item(&inv, rock_floor, 4);
-	set_item(&inv, rock_wall, 5);
-	set_item(&inv, wood, 6);
+	struct item asdd = wood_log;
+	asdd.stack = 3333;
+	set_item(&inv, asdd, 0);
+	//set_item(&inv, wood_door, 2);
+	//set_item(&inv, wood_floor, 3);
+	//set_item(&inv, rock_floor, 4);
+	//set_item(&inv, rock_wall, 5);
+	//set_item(&inv, wood, 6);
 	
 	int ch = 0;
 	while (true) {
-		//printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		printf("wasd - move, 1, 2 - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, q - QUIT\n");
 		read_tile_map(&map, ts.self_map->index);
 		print_vec3(ts.self->position);
 		read_inventory(inv);

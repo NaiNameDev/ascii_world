@@ -54,12 +54,12 @@ int main() {
 		print_vec3(ts.self->position);
 		read_inventory(inv);
 		scanf("%c", &ch);
-		if (ch == '0') {
+		if (ch == ';') {
 			if (ts.self_map->index + 1 <= 2) {
 				move_entity_other_map(&ts, new_vec2(ts.self->position.x, ts.self->position.y), &map.arr[ts.self_map->index + 1]);
 			}
 		}
-		if (ch == '9') {
+		if (ch == '\'') {
 			if (ts.self_map->index - 1 >= 0) {
 				move_entity_other_map(&ts, new_vec2(ts.self->position.x, ts.self->position.y), &map.arr[ts.self_map->index - 1]);
 			}

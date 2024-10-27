@@ -53,7 +53,7 @@ struct object* get_last_object(struct vec2 pos, struct tileMapLayer *map) {
 	struct object* tmp = &map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, 0), map->data.size)];
 	
 	for (int i = 0; i < map->data.size.z; i++) {
-		if (get_obj(new_vec3(pos.x, pos.y, i), map)->sym != air_sym) {
+		if (get_obj(new_vec3(pos.x, pos.y, i), map)->id != -1) {
 			tmp = get_obj(new_vec3(pos.x, pos.y, i), map);
 		}
 	}
@@ -61,8 +61,7 @@ struct object* get_last_object(struct vec2 pos, struct tileMapLayer *map) {
 }
 struct object* get_free_space(struct vec2 pos, struct tileMapLayer *map) {
 	for (int i = 0; i < map->data.size.z; i++) {
-		print_vec2(pos);
-		if (map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, i), map->data.size)].sym == air_sym) {
+		if (map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, i), map->data.size)].id == -1) {
 			return &map->data.arr[vec3_to_size(new_vec3(pos.x, pos.y, i), map->data.size)];
 		}
 	}
@@ -119,4 +118,43 @@ struct tileMap new_tile_map(/*struct tileMapLayer paste_map*/ size_t layer_count
 	}
 
 	return tmp;
+}
+//char air_progress[2] = "#+."
+void read_tile_map(struct tileMap* map, size_t start_z) {
+	for (int i = 0; i < map->arr[start_z].data.size.y; i++) {
+		for (int j = 0; j < map->arr[start_z].data.size.x; j++) {
+			if (get_last_object(new_vec2(j, i), &map->arr[start_z])->id != -1) {
+				read_object(*get_last_object(new_vec2(j, i), &map->arr[start_z]));
+			}
+			else if (start_z + 1 != map->layer_count) {
+				if (get_last_object(new_vec2(j, i), &map->arr[start_z + 1])->id != -1) {
+					switch (get_last_object(new_vec2(j, i), &map->arr[start_z + 1])->id) {
+						case 0:
+							printf("=");
+							break;
+						case 1:
+							printf("#");
+							break;
+						case 2:
+							printf("+");
+							break;
+					}
+				}
+				else {
+					printf(".");
+				}
+				//for (int j = 0; j < map->layer_count - start_index; j++) {
+				//	if (*get_last_object(new_vec2(j, i), map)->index != -1) {
+				//		printf(air_progress[j]);
+				//	}
+				//}
+			}
+			else {
+				printf(".");
+			}
+			printf(" "); //for debug
+		}
+		printf("\n");
+	}
+	printf("\n");
 }

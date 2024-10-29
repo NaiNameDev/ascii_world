@@ -10,7 +10,7 @@ struct entity new_entity(struct object *self, struct tileMapLayer *self_tilemap)
 }
 void move_entity(struct entity *tmp, struct vec2 new_pos) {
 	if (search_id(new_pos, 1, tmp->self_map) == false) {
-		if (new_pos.x > 0 && new_pos.y > 0 && new_pos.x < tmp->self_map->data.size.x && new_pos.y < tmp->self_map->data.size.y)
+		if (new_pos.x > 0 && new_pos.y > 0 && new_pos.x < tmp->self_map->data.size.x - 1 && new_pos.y < tmp->self_map->data.size.y - 1)
 			tmp->self = move_obj(new_pos, *tmp->self, tmp->self_map);
 		}
 }
@@ -31,8 +31,8 @@ struct player {
 	struct inventory inv;
 };
 void place_item(struct item *to_place, struct tileMapLayer *map, struct vec3 pos, int index) {
-	if (search_id(new_vec2(pos.x, pos.y), 1, map) == false && search_id(new_vec2(pos.x, pos.y), 2, map) == false) {
-		if (to_place->block_id != -1 && to_place->stack != 0) {
+	if (search_id(new_vec2(pos.x, pos.y), 1, map) == false) {
+		if (to_place->block_id != -1 && to_place->stack != 0 && search_id(new_vec2(pos.x, pos.y), to_place->block_id, map) == false) {
 			to_place->stack -= 1;
 			set_obj(pos, item_to_object(*to_place), map);
 		}

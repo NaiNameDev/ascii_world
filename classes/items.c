@@ -17,11 +17,3 @@
 #define wood_door		new_item('D', YELLOW_BG, DEF, init_string(4, "door"), 1, 2)
 #define wood_floor		new_item('#', YELLOW, YELLOW, init_string(10, "wood floor"), 1, 2)
 #define rock_floor		new_item('#', DEF, DEF, init_string(10, "rock floor"), 1, 2)
-
-
-//#######
-// CRAFTS
-//#######
-
-
-

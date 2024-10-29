@@ -123,7 +123,7 @@ struct tileMap new_tile_map(/*struct tileMapLayer paste_map*/ size_t layer_count
 void read_tile_map(struct tileMap* map, size_t start_z, struct vec2 start, struct vec2 end) {
 	for (int i = start.y; i < end.y; i++) {
 		for (int j = start.x; j < end.x; j++) {
-			if (i >= 0 && j >= 0) {
+			if (i >= 0 && j >= 0 && i < map->arr[0].data.size.y && j < map->arr[0].data.size.x ) {
 				if (get_last_object(new_vec2(j, i), &map->arr[start_z])->id != -1) {
 						read_object(*get_last_object(new_vec2(j, i), &map->arr[start_z]));
 				}
@@ -158,6 +158,7 @@ void read_tile_map(struct tileMap* map, size_t start_z, struct vec2 start, struc
 				}
 				printf(" "); //for debug
 			}
+			else { printf("  "); }
 		}
 		printf("\n");
 	}

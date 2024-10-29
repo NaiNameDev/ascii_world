@@ -1,6 +1,8 @@
 #define air new_object(new_vec3(0,0,0), '#', DEF, DEF, -1, init_string(3, "air"))
 #include "headers.c"
 
+#define up new_vec2(0, 1)
+#define right new_vec2(1, 0)
 
 char asd[16] = ";;;;;,,,,,,,,,@$";
 
@@ -66,22 +68,51 @@ int main() {
 	struct inventory inv = new_inventory(10);
 	struct item asdd = wood_log;
 	asdd.stack = 19;
-	set_item(&inv, asdd, 0);
+	//set_item(&inv, asdd, 0);
 	
 	//set_item(&inv, wood_door, 2);
 	//set_item(&inv, wood_floor, 3);
 	//set_item(&inv, rock_floor, 4);
 	//set_item(&inv, rock_wall, 5);
 	//set_item(&inv, wood, 6);
-	
+	struct vec2 dir = up;
+
 	int ch = 0;
 	while (true) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		printf("wasd - move, 1, 2 - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, q - QUIT\n");
+		printf("wasd - move, (1, 2) - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, f - change direction, i - inventory mod, q - QUIT\n");
 		read_tile_map(&map, ts.self_map->index, plus_vec2(vec3_to_vec2(ts.self->position), new_vec2(-8,-8)), plus_vec2(vec3_to_vec2(ts.self->position), new_vec2(9,9)));
+		if (vec2_equal(up, dir) == true) {
+			printf("\\/\n");
+		}
+		else if (vec2_equal(right, dir) == true) {
+			printf(">\n");
+		}
+		else if (dir.x == -up.x && dir.y == -up.y) {
+			printf("/\\\n");
+		}
+		else if (dir.x == -right.x && dir.y == -right.y) {
+			printf("<\n");
+		}
 		print_vec3(ts.self->position);
 		read_inventory(inv);
 		scanf("%c", &ch);
+		if (ch == 'f') {
+			if (vec2_equal(up, dir) == true) {
+				dir = right;
+			}
+			else if (vec2_equal(right, dir) == true) {
+				dir.x = -up.x;
+				dir.y = -up.y;
+			}
+			else if (dir.x == -up.x && dir.y == -up.y) {
+				dir.x = -right.x;
+				dir.y = -right.y;
+			}
+			else if (dir.x == -right.x && dir.y == -right.y) {
+				dir = up;
+			}
+		}
 		if (ch == ';') {
 			if (ts.self_map->index + 1 <= 2) {
 				move_entity_other_map(&ts, new_vec2(ts.self->position.x, ts.self->position.y), &map.arr[ts.self_map->index + 1]);
@@ -127,18 +158,18 @@ int main() {
 		}
 
 		if (ch == 'e') {
-			place_item(&inv.arr[inv.chosen_slot], ts.self_map, get_free_space(new_vec2(ts.self->position.x, ts.self->position.y - 1), &map.arr[0])->position, inv.chosen_slot);
+			place_item(&inv.arr[inv.chosen_slot], ts.self_map, get_free_space(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), ts.self_map)->position, inv.chosen_slot);
 		}
 		if (ch == 'z') {
-			if (ts.self_map->index + 1 != map.layer_count) {
-				collect_block(new_vec2(ts.self->position.x, ts.self->position.y - 1), &inv, &map.arr[ts.self_map->index + 1]);
+			if (ts.self_map->index + 1 != map.layer_count && get_obj(vec2_to_vec3(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), 0), ts.self_map)->id == -1) {
+				collect_block(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), &inv, &map.arr[ts.self_map->index + 1]);
 			}
 		}
 		if (ch == 'x') {
-			collect_block(new_vec2(ts.self->position.x, ts.self->position.y - 1), &inv, ts.self_map);
+			collect_block(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), &inv, ts.self_map);
 		}
 		if (ch == 'c') {
-			collect_floor(new_vec2(ts.self->position.x, ts.self->position.y - 1), &inv, ts.self_map);
+			collect_floor(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), &inv, ts.self_map);
 		}
 
 		if (ch == 'q') { break; }

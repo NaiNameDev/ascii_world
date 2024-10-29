@@ -27,6 +27,14 @@ struct vec2 new_vec2(int x, int y) {
 	tmp.y = y;
 	return tmp;
 };
+int vec2_equal(struct vec2 first, struct vec2 second) {
+	if (first.x == second.x && first.y == second.y) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 struct vec2 plus_vec2(struct vec2 a, struct vec2 b) {
 	return new_vec2(a.x + b.x, a.y + b.y);
@@ -38,4 +46,7 @@ void print_vec2(struct vec2 tmp) {
 
 struct vec2 vec3_to_vec2(struct vec3 pos) {
 	return new_vec2(pos.x, pos.y);
+}
+struct vec3 vec2_to_vec3(struct vec2 pos, int z) {
+	return new_vec3(pos.x, pos.y, z);
 }

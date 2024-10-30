@@ -18,6 +18,10 @@ int main() {
 	append_craft_element(&door_c, wood_log, 4);
 	append_craft_level(door_c, &hand_lvl);
 
+	struct craft workbanch_c = init_craft(workbanch, 0, hand_lvl);
+	append_craft_element(&workbanch_c, wood_log, 10);
+	append_craft_level(workbanch_c, &hand_lvl);
+
 	struct craft wood_c = init_craft(wood, 0, hand_lvl);
 	append_craft_element(&wood_c, wood_log, 2);
 	append_craft_level(wood_c, &hand_lvl);
@@ -29,6 +33,15 @@ int main() {
 	struct craft rock_floor_c = init_craft(rock_floor, 0, hand_lvl);
 	append_craft_element(&rock_floor_c, rock, 2);
 	append_craft_level(rock_floor_c, &hand_lvl);
+
+
+
+	//wrokbanch crafts
+	struct craftLevel workbanch_lvl = init_craft_level(0);
+
+	struct craft glass_c = init_craft(glass, 0, workbanch_lvl);
+	append_craft_element(&glass_c, rock, 2);
+	append_craft_level(glass_c, &workbanch_lvl);
 
 	srand(time(NULL)); //for random O_o
 	struct tileMap map = new_tile_map(3, 250, 250);
@@ -68,7 +81,7 @@ int main() {
 	struct inventory inv = new_inventory(10);
 	struct item asdd = wood_log;
 	asdd.stack = 19;
-	//set_item(&inv, asdd, 0);
+	set_item(&inv, asdd, 0);
 	
 	//set_item(&inv, wood_door, 2);
 	//set_item(&inv, wood_floor, 3);
@@ -80,7 +93,7 @@ int main() {
 	int ch = 0;
 	while (true) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		printf("wasd - move, (1, 2) - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, f - change direction, i - inventory mod, q - QUIT\n");
+		printf("wasd - move, (1, 2) - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, f - change direction, i - inventory mod, Q - QUIT\n");
 		read_tile_map(&map, ts.self_map->index, plus_vec2(vec3_to_vec2(ts.self->position), new_vec2(-8,-8)), plus_vec2(vec3_to_vec2(ts.self->position), new_vec2(9,9)));
 		if (vec2_equal(up, dir) == true) {
 			printf("\\/\n");
@@ -132,16 +145,32 @@ int main() {
 		}
 		if (ch == 'i') {
 			int chi = 0;
-			while(true) {
-				printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-				read_craft_level(hand_lvl);
-				printf("chose craft (N)umber\n");
-				printf("type eny symbol to exit\n");
-				read_inventory(inv);
-				if (scanf("%d", &chi) != 0) { }
-				else { break; }
-				craft_item(hand_lvl.belt[chi - 1], &inv);
+			struct String toeq = init_string(9, "workbanch");
+			if (check_strings_equal(get_last_object(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), ts.self_map)->name, toeq) == false) {
+				while(true) {
+					printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+					read_craft_level(hand_lvl);
+					printf("chose craft (N)umber\n");
+					printf("type eny symbol to exit\n");
+					read_inventory(inv);
+					if (scanf("%d", &chi) != 0) { }
+					else { break; }
+					craft_item(hand_lvl.belt[chi - 1], &inv);
+				}
 			}
+			else {
+				while(true) {
+					printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+					read_craft_level(workbanch_lvl);
+					printf("chose craft (N)umber\n");
+					printf("type eny symbol to exit\n");
+					read_inventory(inv);
+					if (scanf("%d", &chi) != 0) { }
+					else { break; }
+					craft_item(workbanch_lvl.belt[chi - 1], &inv);
+				}
+			}
+			free_string(&toeq);
 		}
 
 		if (ch == 'a') {
@@ -172,7 +201,7 @@ int main() {
 			collect_floor(plus_vec2(new_vec2(ts.self->position.x, ts.self->position.y), dir), &inv, ts.self_map);
 		}
 
-		if (ch == 'q') { break; }
+		if (ch == 'Q') { break; }
 	}
 	
 	free_full_craft_level(&hand_lvl);

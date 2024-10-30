@@ -17,3 +17,9 @@
 #define wood_door		new_item('D', YELLOW_BG, DEF, init_string(4, "door"), 1, 2)
 #define wood_floor		new_item('#', YELLOW, YELLOW, init_string(10, "wood floor"), 1, 2)
 #define rock_floor		new_item('#', DEF, DEF, init_string(10, "rock floor"), 1, 2)
+
+
+
+#define workbanch		new_item('8', YELLOW_BG, BLACK, init_string(9, "workbanch"), 1, 1)
+
+#define glass 			new_item('G', CYAN_BG, CYAN_BG, init_string(5, "glass"), 1, 1)

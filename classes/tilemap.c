@@ -134,10 +134,7 @@ void read_tile_map(struct tileMap* map, size_t start_z, struct vec2 start, struc
 								printf("=");
 								break;
 							case 1:
-								read_color(BLACK);
-								read_color(WHITE_BG);
 								printf("#");
-								read_color(DEF);
 								break;
 							case 2:
 								printf("+");

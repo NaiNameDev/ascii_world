@@ -1,9 +1,9 @@
 CMPLR = gcc
 TARGET = main.c
-FLGS = -o
+FLGS = -lcurses
 
 a.elf: $(TARGET)
-	$(CMPLR) $(TARGET) $(FLGS) a.elf
+	$(CMPLR) $(TARGET) -o a.elf $(FLGS)
 
 .PHONY: ct c
 

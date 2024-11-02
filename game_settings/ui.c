@@ -22,9 +22,10 @@ void craft_loop(struct craftLevel lvl, struct inventory inv) {
 void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 	struct tileMap map = gen(time(NULL), new_vec2(30, 30), 3);
 	//map.arr[0] = load();
-	read_map(&map.arr[0]);
-	save_layer_data(init_string(3, "asd"), &map.arr[0].data);
-	load_layer_data();
+	//read_map(&map.arr[0]);
+	//save_world(&map, init_string(3, "ts/"));
+	//map = load_world(init_string(11, "./saves/ts/"));
+	//load_layer_data();
 	read_map(&map.arr[0]);
 	return;
 

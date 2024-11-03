@@ -12,7 +12,7 @@ struct object new_object(struct vec3 pos, char sym, char color[5], char color_bg
 	struct object tmp;
 	tmp.position = pos;
 	tmp.sym = sym;
-	reinit(&tmp.name, name);
+	reinit_string(&tmp.name, name);
 	set_color(tmp.color, color);
 	set_color(tmp.color_bg, color_bg);
 	tmp.id = id;

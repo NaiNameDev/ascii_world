@@ -23,11 +23,9 @@ void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 	struct tileMap map = gen(time(NULL), new_vec2(30, 30), 3);
 	//map.arr[0] = load();
 	//read_map(&map.arr[0]);
-	//save_world(&map, init_string(3, "ts/"));
-	//map = load_world(init_string(11, "./saves/ts/"));
-	//load_layer_data();
-	read_map(&map.arr[0]);
-	return;
+	//save_world(&map, init_string(3, "def/"));
+	//map = load_world(init_string(12, "./saves/def/"));
+	//read_map(&map.arr[0]);
 
 	struct object* a = set_obj(new_vec3(5,5,7), new_object(new_vec3(3,3,3), 'P', GREEN, PURPLE_BG, 0, init_string(6, "player")), &map.arr[0]);
 	struct entity player = new_entity(a, &map.arr[0]);
@@ -39,7 +37,7 @@ void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 	int ch = 0;
 	while (true) {
 		printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		printf("wasd - move, (1, 2) - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, f - change direction, i - inventory mod, Q - QUIT\n\n");	
+		printf("wasd - move, (1, 2) - change slot, e - place block, x - break block, c - break floor, z - break block on z - 1, ; - move down, ' - move up, f - change direction, i - inventory mod, S - save, L - load, Q - QUIT\n\n");	
 		print_vec3(player.self->position);
 		read_tile_map(&map, player.self_map->index, plus_vec2(vec3_to_vec2(player.self->position), new_vec2(-8,-8)), plus_vec2(vec3_to_vec2(player.self->position), new_vec2(9,9)));
 		if (vec2_equal(up, dir) == true) {
@@ -56,20 +54,6 @@ void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 		}
 		read_inventory(inv);
 
-		//кстыль
-		usleep(50000);
-		initscr();
-		curs_set(0);
-		keypad(stdscr, TRUE);
-		nodelay(stdscr, TRUE);
-		nonl();
-		cbreak();
-		noecho();
-
-		ch = getch();
-		
-		endwin();
-
 		if (ch == 'f') {
 			if (vec2_equal(up, dir) == true) {
 				dir = right;
@@ -84,6 +68,28 @@ void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 			}
 			else if (dir.x == -right.x && dir.y == -right.y) {
 				dir = up;
+			}
+		}
+		if (ch == 'S') {
+			char chi[25];
+			printf("\nsave file name(max 25): ");
+			scanf("%24[^\n]", chi);
+			printf("\nSAVING...\n");
+			save_world(&map, init_string(strlen(chi), chi));
+			//break;
+		}
+		if (ch == 'L') {
+			char chi[25];
+			printf("\nsave file name: ");
+			scanf("%24[^\n]", chi);
+			printf("\nLOADING...\n");
+			map = load_world(init_string(strlen(chi), chi));
+			for (int i = 0; i < map.arr[0].data.size.y * map.arr[0].data.size.z * map.arr[0].data.size.x; i++) {
+				if (map.arr[0].data.arr[i].sym == 'P') {
+					a = &map.arr[0].data.arr[i];
+					player.self = &map.arr[0].data.arr[i];
+					player.self_map = &map.arr[0];
+				}
 			}
 		}
 		if (ch == ';') {
@@ -141,6 +147,19 @@ void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 		if (ch == 'c') {
 			collect_floor(plus_vec2(new_vec2(player.self->position.x, player.self->position.y), dir), &inv, player.self_map);
 		}
+
+		usleep(50000);
+		initscr();
+		curs_set(0);
+		keypad(stdscr, TRUE);
+		nodelay(stdscr, TRUE);
+		nonl();
+		cbreak();
+		noecho();
+
+		ch = getch();
+		
+		endwin();
 
 		if (ch == 'Q') { break; }
 	}

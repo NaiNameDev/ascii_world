@@ -13,3 +13,5 @@ c: a.elf
 ct: a.elf
 	./a.elf
 	rm a.elf
+cs: 
+	rm -rf saves/

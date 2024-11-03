@@ -15,7 +15,7 @@ struct item new_item(char icon, char color[5], char color_bg[5], struct String n
 	tmp.icon = icon;
 	set_color(tmp.icon_color, color);
 	set_color(tmp.icon_color_bg, color_bg);
-	reinit(&tmp.name, name);
+	reinit_string(&tmp.name, name);
 	tmp.stack = stack;
 	tmp.block_id = block_id;
 	

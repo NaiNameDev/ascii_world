@@ -5,14 +5,13 @@ struct String {
 
 struct String init_string(size_t size, char* charstr) {
 	struct String tmp;
+
 	tmp.arr = (char*) malloc(size * sizeof(char));
 	tmp.size = size;
 
 	for (int i = 0; i < size; i++) {
 		tmp.arr[i] = charstr[i];
 	}
-
-	return tmp;
 }
 
 void init_var_string(size_t size, char* charstr, struct String* tmp) {
@@ -24,20 +23,20 @@ void init_var_string(size_t size, char* charstr, struct String* tmp) {
 	}
 }
 
-void char_append(struct String *str, char charstr) {
+void char_append(struct String *str, char ch) {
 	str->size += 1;
 	
 	(*str).arr = realloc(str->arr, str->size * sizeof(char));
-	(*str).arr[str->size - 1] = charstr;
+	(*str).arr[str->size - 1] = ch;
 }
 
 void char_array_append(struct String *str, size_t size, char* charstr) {
-	size_t start_point = str->size;
+	size_t start = str->size;
 	str->size += size;
-
+	
 	(*str).arr = realloc(str->arr, str->size * sizeof(char));
 	for (int i = 0; i < size; i++) {
-		(*str).arr[i + start_point] = charstr[i];
+		(*str).arr[i + start] = charstr[i];
 	}
 }
 
@@ -53,7 +52,7 @@ void string_append(struct String *str, struct String to_add) {
 
 void reinit_string(struct String *str, struct String new) {
 	str->size = new.size;
-	//free(&str->arr);
+	//free(str->arr);
 
 	(*str).arr = malloc(str->size * sizeof(char));
 	for (int i = 0; i < new.size; i++) {

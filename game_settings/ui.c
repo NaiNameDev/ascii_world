@@ -169,3 +169,99 @@ void main_loop(struct craftLevel hand_lvl, struct craftLevel workbanch_lvl) {
 	free_tile_map_data(&map.arr[2].data);
 	endwin();	
 }
+
+void main_menu();
+
+void multi_menu() {
+	
+}
+
+void solo_menu() {
+	start_loop;
+	return;
+
+	int chi = 0;
+	clear();
+
+	nodelay(stdscr, FALSE);
+	curs_set(1);
+	int h,w;
+	getmaxyx(stdscr, h, w);	
+
+	move(h / 2, w / 2 - 19);
+	printw("type seed(leave empty for random seed)");
+
+	move(h / 2 + 1, w / 2);
+
+	while (1) {
+		chi = getch();
+		if (chi == 0) {
+			break;
+		}
+		if (chi == 'Q') {
+			clear();
+			main_menu();
+			break;
+		}
+		if (chi == KEY_BACKSPACE) {
+			
+		}
+		if (chi) {
+			addch(chi | A_UNDERLINE);
+		}
+	}
+}
+
+void main_menu() {
+	initscr();
+	curs_set(0);
+	keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
+	nonl();
+	cbreak();
+	noecho();	
+
+	int h, w;
+	getmaxyx(stdscr, h, w);	
+
+	if (h < 20 || w < 40) {
+		printf("to small console window please resize wondow and restart the game!");
+		return;
+	}
+	start_color();
+	init_pair(1, COLOR_BLUE, COLOR_RED);	
+
+	printw("by NaiName");
+
+	int chi = 0;
+	char hello[] = "WELCOME TO ASCII WORLD!";
+	char solo[] = "1 - play singleplayer";
+	char multi[] = "2 - play multiplayer";
+	char quit[] = "Q - quit";
+
+	//attron(COLOR_PAIR(1));
+	move(h / 2, w / 2 -  strlen(hello) / 2);
+	printw(hello);
+	move(h / 2 + 2, w / 2 - strlen(solo) / 2);
+	printw(solo);
+	move(h / 2 + 3, w / 2 - strlen(multi) / 2);
+	printw(multi);
+	move(h / 2 + 4, w / 2 - strlen(quit) / 2);
+	printw(quit);
+
+	while(1) {
+		chi = getch();
+		if (chi == 'Q') {
+			break;
+		}
+		if (chi == '1') {
+			solo_menu();
+			break;
+		}
+		if (chi == '2') {
+			multi_menu();
+		}
+	}
+
+	endwin();
+}

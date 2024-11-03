@@ -1,6 +1,10 @@
 #define air new_object(new_vec3(0,0,0), '#', DEF, DEF, -1, init_string(4, "air "))
 #include "headers.c"
 
+void start_loop() {
+	main_loop(hand_lvl, workbanch_lvl);
+}
+
 int main() {
 	//crafts
 	struct craftLevel hand_lvl = init_craft_level(0);
@@ -36,8 +40,8 @@ int main() {
 	append_craft_element(&glass_c, rock, 2);
 	append_craft_level(glass_c, &workbanch_lvl);
 	
-	main_loop(hand_lvl, workbanch_lvl);
-	
+	main_menu();
+
 	//struct tileMap a = gen(time(NULL),new_vec2(10, 10), 3);
 
 	free_full_craft_level(&hand_lvl);
